@@ -1,9 +1,9 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: "Next.js",
+  name: "Tradepost - Diablo IV Trading",
   description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+    "A site for listing and finding rares in Diablo IV.",
   mainNav: [
     {
       title: "Home",
@@ -11,8 +11,7 @@ export const siteConfig = {
     },
   ],
   links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
-    docs: "https://ui.shadcn.com",
+    twitter: "https://twitter.com/tomshawdev",
+    github: "https://github.com/tomshaw650/tradepost",
   },
 }
