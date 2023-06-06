@@ -3,22 +3,14 @@
 import * as React from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Region, User } from "@prisma/client"
+import { User, Region } from "@prisma/client"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
 import { userSchema } from "@/lib/validators/user"
 import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form"
 import {
   Select,
   SelectContent,
@@ -27,20 +19,20 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-interface UserNameFormProps extends React.HTMLAttributes<HTMLFormElement> {
-  user: Pick<User, "id" | "name">
+interface EditFormProps extends React.HTMLAttributes<HTMLFormElement> {
+  user: Pick<User, "id" | "battletag" | "region">
 }
 
 type FormData = z.infer<typeof userSchema>
 
-export function NewUserForm({ user }: UserNameFormProps) {
+export function EditForm({ user }: EditFormProps) {
   const router = useRouter()
 
   const form = useForm<FormData>({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      battletag: "",
-      region: "EU",
+      battletag: user.battletag!,
+      region: user.region!,
     },
   })
 
@@ -65,7 +57,7 @@ export function NewUserForm({ user }: UserNameFormProps) {
     if (!response?.ok) {
     }
 
-    router.push("/home")
+    router.refresh()
   }
 
   return (
@@ -78,8 +70,8 @@ export function NewUserForm({ user }: UserNameFormProps) {
             <>
               <FormItem>
                 <FormLabel>BattleTag</FormLabel>
-                <FormControl>
-                  <Input placeholder="user#0000" {...field} />
+                <FormControl className="max-w-xs">
+                  <Input {...field} />
                 </FormControl>
                 <FormDescription>
                   This will be used to get in touch with other players.

@@ -8,7 +8,7 @@ export default function Policy() {
           Personal Data: various types of Data as specified in the privacy
           policy of the service<br />
           Contact information Owner and Data Controller
-          Tradepost Owner contact email: tomshaw650@gmail.com
+          Diablozon Owner contact email: tomshaw650@gmail.com
         </p>
       </div>
     </section>
