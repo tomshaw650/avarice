@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { env } from "env"
+import { env } from "@/lib/env"
 
 export const authOptions: NextAuthOptions = {
   providers: [
