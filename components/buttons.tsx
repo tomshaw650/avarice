@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 
 export const LoginButton = () => {
   return (
-    <Button onClick={() => signIn()}>
+    <Button onClick={() => signIn("battlenet")}>
       Sign in
     </Button>
   );
