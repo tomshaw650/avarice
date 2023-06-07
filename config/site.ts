@@ -1,9 +1,9 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: "Diablozon",
+  name: "Avarice",
   description:
-    "A site for listing and finding rares in Diablo IV.",
+    "A trading post for listing and finding rares in Diablo IV.",
   mainNav: [
     {
       title: "Home",
@@ -16,6 +16,6 @@ export const siteConfig = {
   ],
   links: {
     twitter: "https://twitter.com/tomshawdev",
-    github: "https://github.com/tomshaw650/diablozon",
+    github: "https://github.com/tomshaw650/avarice",
   },
 }

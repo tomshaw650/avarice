@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { MinusSquare, PlusSquare } from "lucide-react";
 import { signIn, signOut } from "next-auth/react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
@@ -27,11 +27,21 @@ export const LogoutButton = () => {
 
 export const ProfileButton: React.FC<ProfileButtonProps> = ({ image, initials }) => {
   return (
-    <Link href="/profile">
-      <Avatar>
-        <AvatarImage src={image} />
-        <AvatarFallback>{initials}</AvatarFallback>
-      </Avatar>
-    </Link>
+    <Avatar>
+      <AvatarImage src={image} />
+      <AvatarFallback>{initials}</AvatarFallback>
+    </Avatar>
   );
 };
+
+export const AddStatButton = ({ addStat }: { addStat: () => void }) => {
+  return (
+    <Button type="button" variant="ghost" onClick={addStat}><PlusSquare /></Button>
+  )
+}
+
+export const RemoveStatButton = ({ removeStat }: { removeStat: any }) => {
+  return (
+    <Button type="button" variant="ghost" onClick={removeStat}><MinusSquare /></Button>
+  )
+}

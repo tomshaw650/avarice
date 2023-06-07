@@ -1,17 +1,13 @@
 import { siteConfig } from "@/config/site"
 import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { getCurrentUser } from "@/lib/session";
-import { ProfileButton, LoginButton } from "./buttons";
+import { LoginButton } from "./buttons"
+import { UserDropdown } from "./user-dropdown"
+
+import { getCurrentUser } from "@/lib/session"
 
 export async function SiteHeader() {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    return <LoginButton />;
-  }
-
-  const initials = user?.name?.split(" ").map((n) => n[0]).join("") || "";
+  const user = await getCurrentUser()
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -20,10 +16,12 @@ export async function SiteHeader() {
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
             <ThemeToggle />
-            <ProfileButton image={user.image!} initials={initials} />
+            {user && user.image ?
+            <UserDropdown user={user} />
+            : <LoginButton />}
           </nav>
         </div>
       </div>
     </header>
-  );
+  )
 }
