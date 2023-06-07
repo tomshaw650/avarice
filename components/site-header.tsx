@@ -7,7 +7,7 @@ import { UserDropdown } from "./user-dropdown"
 import { getCurrentUser } from "@/lib/session"
 
 export async function SiteHeader() {
-  const user = await getCurrentUser()
+  const user = await getCurrentUser();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
