@@ -83,6 +83,7 @@ export async function GET(req: Request, context: z.infer<typeof routeContextSche
 
 // currently unsafe, not checking if user is owner of listing
 export async function DELETE(
+  req: Request,
   context: z.infer<typeof routeContextSchema>
 ) {
   try {
