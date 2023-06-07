@@ -79,6 +79,7 @@ model Listing {
   tier     Tier
   stats    Stat[]
   price    String?
+  createdAt DateTime @default(now())
 
   listerId String
   typeId String

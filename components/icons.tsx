@@ -4,6 +4,8 @@ import {
   SunMedium,
   Loader2,
   Twitter,
+  Trash,
+  MoreVertical,
   type Icon as LucideIcon,
 } from "lucide-react"
 
@@ -13,6 +15,8 @@ export const Icons = {
   sun: SunMedium,
   moon: Moon,
   twitter: Twitter,
+  ellipsis: MoreVertical,
+  trash: Trash,
   spinner: Loader2,
   logo: (props: LucideProps) => (
     <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="24pt" width="24pt" preserveAspectRatio="xMidYMid meet" {...props}>

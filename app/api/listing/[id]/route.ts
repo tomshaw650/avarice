@@ -2,6 +2,20 @@ import { listingSchema } from "@/lib/validators/listing";
 import * as z from "zod";
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth";
+
+const routeContextSchema = z.object({
+  params: z.object({
+    userId: z.string(),
+  }),
+})
+
+const listingContextSchema = z.object({
+  params: z.object({
+    listingId: z.string(),
+  }),
+})
 
 export async function POST(req: Request) {
   try {
@@ -45,6 +59,45 @@ export async function POST(req: Request) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return new Response(JSON.stringify(error.issues), { status: 422 } )
+    }
+
+    return new Response(null, { status: 500 })
+  }
+}
+
+export async function GET(req: Request, context: z.infer<typeof routeContextSchema>) {
+  const { params } = routeContextSchema.parse(req)
+
+  const listing = await db.listing.findUnique({
+    where: {
+      id: params.userId,
+    },
+    include: {
+      type: true,
+      stats: true,
+    },
+  })
+
+  return new Response(JSON.stringify(listing), { status: 200 })
+}
+
+// currently unsafe, not checking if user is owner of listing
+export async function DELETE(
+  context: z.infer<typeof routeContextSchema>
+) {
+  try {
+    const { params } = listingContextSchema.parse(context)
+
+    await db.listing.delete({
+      where: {
+        id: params.listingId as string,
+      },
+    })
+
+    return new Response(null, { status: 204 })
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return new Response(JSON.stringify(error.issues), { status: 422 })
     }
 
     return new Response(null, { status: 500 })

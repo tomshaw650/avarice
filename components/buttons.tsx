@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { MinusSquare, PlusSquare } from "lucide-react";
 import { signIn, signOut } from "next-auth/react";
 import { Button } from "./ui/button";
@@ -33,6 +34,12 @@ export const ProfileButton: React.FC<ProfileButtonProps> = ({ image, initials })
     </Avatar>
   );
 };
+
+export const ListingPageButton = () => {
+  return (
+    <Link href="/new"><Button type="button" variant="ghost">New listing</Button></Link>
+  )
+}
 
 export const AddStatButton = ({ addStat }: { addStat: () => void }) => {
   return (

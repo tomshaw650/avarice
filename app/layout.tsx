@@ -7,6 +7,7 @@ import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import { SiteHeader } from "@/components/site-header"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/toaster"
 import { NextAuthProvider } from "./providers"
 
 export const metadata: Metadata = {
@@ -45,7 +46,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <div className="relative flex min-h-screen flex-col">
               {/* @ts-expect-error Async Server Component */}
               <SiteHeader />
-              <div className="flex-1"><NextAuthProvider>{children}<Analytics /></NextAuthProvider></div>
+              <div className="flex-1"><NextAuthProvider>{children}<Analytics /><Toaster /></NextAuthProvider></div>
             </div>
           </ThemeProvider>
         </body>
