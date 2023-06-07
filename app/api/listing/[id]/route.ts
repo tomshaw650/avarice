@@ -14,21 +14,28 @@ export async function POST(req: Request) {
     const json = await req.json()
     const body = listingSchema.parse(json)
 
-    // create db listing, which needs to connect to user and stat
+    // create db listing, which needs to connect to user and stat and type
     const listing = await db.listing.create({
       data: {
         name: body.name,
-        type: body.type,
         power: body.power,
         tier: body.tier,
         price: body.price,
+        type: {
+          connect: {
+            id: body.type,
+          }
+        },
         lister: {
           connect: {
             id: user.id,
           },
         },
         stats: {
-          create: body.stats,
+          create: body.stats.map((stat) => ({
+            name: stat.name,
+            range: stat.range,
+          })),
         },
       },
     })

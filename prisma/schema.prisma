@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output = "../node_modules/.prisma/client"
+  output   = "../node_modules/.prisma/client"
 }
 
 generator zod {
@@ -78,22 +78,26 @@ model VerificationToken {
 
 model Listing {
   id       String  @id @default(cuid())
-  listerId String
   name     String?
-  type     String
   power    Int
   tier     Tier
   stats    Stat[]
   price    String?
 
-  lister User @relation(fields: [listerId], references: [id], onDelete: Cascade)
+  listerId String
+  typeId String
 
+  type     Type   @relation(fields: [typeId], references: [id])
+  lister   User   @relation(fields: [listerId], references: [id], onDelete: Cascade)
+
+  @@index([typeId])
   @@index([listerId])
 }
 
 model Type {
-  id   String @id @default(cuid())
-  name String
+  id      String    @id @default(cuid())
+  name    String
+  Listing Listing[]
 }
 
 model Stat {

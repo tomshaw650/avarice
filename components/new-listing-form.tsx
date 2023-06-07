@@ -6,10 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
+import { cn } from "@/lib/utils"
 import { listingSchema } from "@/lib/validators/listing"
 import type { Type } from "@prisma/client"
 import { Tier } from "@prisma/client"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -29,6 +30,7 @@ import {
 } from "@/components/ui/select"
 import { Separator } from "./ui/separator"
 import { AddStatButton, RemoveStatButton } from "./buttons"
+import { Icons } from "./icons"
 
 interface NewListingProps {
   id: string
@@ -49,10 +51,12 @@ export function NewListingForm({ id, types }: NewListingProps) {
   const form = useForm<FormData>({
     resolver: zodResolver(listingSchema),
     defaultValues: {
+      name: "",
       type: "",
       power: 0,
       tier: "BASE",
       stats: [],
+      price: ""
     },
   })
 
@@ -71,7 +75,7 @@ export function NewListingForm({ id, types }: NewListingProps) {
         type: data.type,
         power: data.power,
         tier: data.tier,
-        stats: data.stats,
+        stats: stats,
         price: data.price,
         lister: id,
       }),
@@ -84,119 +88,117 @@ export function NewListingForm({ id, types }: NewListingProps) {
       return
     }
 
-    router.push("/home")
+    // routing to newly created listing would be preferable
+    router.push('/')
   }
 
   const handleAddStat = () => {
     const newStat = {
       name: "",
       range: "",
-    }
+    };
 
-    setStats([...stats, newStat]);
+    setStats((prevStats) => [...prevStats, newStat]);
   };
 
   const handleRemoveStat = (index: number) => {
-    const updatedStats = [...stats];
-    updatedStats.splice(index, 1);
-    setStats(updatedStats);
+    setStats((prevStats) => {
+      const updatedStats = [...prevStats];
+      updatedStats.splice(index, 1);
+      return updatedStats;
+    });
   };
 
   const handleStatChange = (index: number, field: keyof statData, value: string) => {
-    const updatedStats = [...stats];
-    updatedStats[index][field] = value;
-    setStats(updatedStats);
+    setStats((prevStats) => {
+      const updatedStats = [...prevStats];
+      updatedStats[index] = {
+        ...updatedStats[index],
+        [field]: value,
+      };
+      return updatedStats;
+    });
   };
-
-  console.log(form.getValues());
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-      <FormField
+        <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
-            <>
-              <FormItem>
-                <FormLabel>Item Name</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>Optional. Leave blank and the item type will be listed instead.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            </>
+            <FormItem>
+              <FormLabel>Item Name</FormLabel>
+              <FormControl>
+                <Input placeholder="The Grandfather" {...field} />
+              </FormControl>
+              <FormDescription>Optional. Leave blank and the item type will be listed instead.</FormDescription>
+              <FormMessage />
+            </FormItem>
           )}
         />
         <FormField
           control={form.control}
           name="type"
           render={({ field }) => (
-            <>
-              <FormItem>
-                <FormLabel>Item Type</FormLabel>
+            <FormItem>
+              <FormLabel>Item Type</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <Select>
-                    <SelectTrigger className="w-[215px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {types.map((type: Type) => (
-                        <SelectItem key={type.id} {...field}>
-                          {type.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <SelectTrigger className="w-[215px]">
+                    <SelectValue placeholder="Select a type" />
+                  </SelectTrigger>
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            </>
+                <SelectContent>
+                  {types.map((type: Type) => (
+                    <SelectItem key={type.id} value={type.id}>
+                      {type.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
           )}
         />
         <FormField
           control={form.control}
           name="power"
           render={({ field }) => (
-            <>
-              <FormItem>
-                <FormLabel>Item Power</FormLabel>
-                <FormControl>
-                  <Input type="number" onChange={event => field.onChange(+event.target.value)} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            </>
+            <FormItem>
+              <FormLabel>Item Power</FormLabel>
+              <FormControl>
+                <Input type="number" onChange={event => field.onChange(+event.target.value)} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
         />
         <FormField
           control={form.control}
           name="tier"
           render={({ field }) => (
-            <>
-              <FormItem>
-                <FormLabel>Item Tier</FormLabel>
+            <FormItem>
+              <FormLabel>Item Tier</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <Select>
-                    <SelectTrigger className="w-[215px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.keys(Tier).map((key) => (
-                        <SelectItem
-                          key={key}
-                          value={Tier[key as keyof typeof Tier]}
-                        >
-                          {Tier[key as keyof typeof Tier]}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <SelectTrigger className="w-[215px]">
+                    <SelectValue />
+                  </SelectTrigger>
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            </>
+                <SelectContent>
+                  {Object.keys(Tier).map((key) => (
+                    <SelectItem
+                      key={key}
+                      value={Tier[key as keyof typeof Tier]}
+                    >
+                      {Tier[key as keyof typeof Tier]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
           )}
         />
         <Separator />
@@ -205,7 +207,7 @@ export function NewListingForm({ id, types }: NewListingProps) {
           name="stats"
           render={({ field }) => (
             <>
-              <div className="mb-5 flex items-center gap-x-5">
+              <div className="mb-5 flex items-center gap-x-3">
                 <h2 className="text-xl font-extrabold leading-tight tracking-tighter md:text-2xl">Add stats: </h2>
                 <AddStatButton addStat={handleAddStat} />
               </div>
@@ -242,19 +244,22 @@ export function NewListingForm({ id, types }: NewListingProps) {
           control={form.control}
           name="price"
           render={({ field }) => (
-            <>
-              <FormItem>
-                <FormLabel>Price</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>Optionally add a price. Users will send offers if no price is set.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            </>
+            <FormItem>
+              <FormLabel>Price</FormLabel>
+              <FormControl>
+                <Input placeholder="500,000 gold" {...field} />
+              </FormControl>
+              <FormDescription>Optionally add a price. Users will send offers if no price is set.</FormDescription>
+              <FormMessage />
+            </FormItem>
           )}
         />
-        <Button type="submit">Create</Button>
+        <Button type="submit" className={cn(buttonVariants())}>
+          {isSaving && (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          )}
+          <span>Create</span>
+        </Button>
       </form>
     </Form>
   )
